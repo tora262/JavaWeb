@@ -1,0 +1,79 @@
+@startuml
+' hide the spot
+' hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "department" as Department {
+  *deparment_id : number <<generated>>
+  --
+  *department_name : varchar(45)
+  address : text
+  *phone : char(10)
+  *is_delivery : boolean
+}
+
+entity "employee" as Employee {
+  *employee_id : number <<generated>>
+  --
+  *employee_name
+  *department_id : number <<FK>>
+  phone : char(10)
+}
+
+entity "product" as Product {
+  *product_id : number <<generated>>
+  --
+  *product_name : varchar(50)
+  description : text
+  *unit_type: varchar(20)
+  *price : number
+}
+
+entity "order" as Order {
+  *order_id : number <<generated>>
+  --
+  *order_department_id : number <<FK>>
+  *order_employee_id : number <<FK>>
+  *order_date : datetime
+}
+
+entity "order_detail" as OrderDetail {
+  *order_detail_id : number <<generated>>
+  --
+  *order_id : number <<FK>>
+  *product_id: number <<FK>>
+  *quantity : number
+}
+
+entity "delivery_receipt" as DeliveryReceipt {
+  *receipt_id : number <<generated>>
+  --
+  *receive_department_id : number <<FK>>
+  *receive_employee_id : number <<FK>>
+  *delivery_department_id : number <<FK>>
+  *delivery_employee_id : number <<FK>>
+  *delivery_date : datetime
+  discount_rate : number
+}
+
+entity "recept_detail" as ReceiptDetail {
+  *receipt_detail_id : number <<generated>>
+  --
+  *receipt_id : number <<FK>>
+  *product_id: number <<FK>>
+  *quantity : number
+}
+
+Department ||..|{ Employee
+Department ||..|{ Order
+Department ||..|{ DeliveryReceipt
+Employee||..|{ Order
+Employee||..|{ DeliveryReceipt
+Order ||..|{ OrderDetail
+OrderDetail ||..|| Product
+DeliveryReceipt ||..|{ ReceiptDetail
+ReceiptDetail ||..|| Product
+
+@enduml
